@@ -52,3 +52,44 @@ DBSCAN은 거리 기반 클러스터링을 통해 지리적·금액적으로 독
 향후 작업에서는 두 모델의 탐지된 이상치의 중복 여부 분석과 함께, 실제 라벨과의 비교 또는 이상치 시각화 등을 통해 정밀도/재현율 기반 평가가 필요
 
 
+
+
+
+# Autoencoder(24).ipynb학습 결과
+
+총 샘플 수: 2,512건
+사용된 수치형 컬럼:
+['TransactionAmount', 'CustomerAge', 'TransactionDuration', 'LoginAttempts', 'AccountBalance']
+
+-DBSCAN 이상치 탐지 결과
+eps	min_samples	이상치 수
+0.5	 5	 508
+0.5	 10	 918
+1.0	 5	 130
+1.0	 10	 162
+1.5  5	 45
+1.5	 10	 96
+
+적정값 판단: eps=1.0, min_samples=5일 때 이상치가 130건으로 나타났으며, 지나치게 민감하지도 무디지도 않은 수준으로 판단됨.
+
+-Autoencoder 결과
+Epoch 50까지 평균 재구성 손실 감소: 0.1872 → 0.1648
+
+-MSE 기반 이상치 기준 (상위 5%)
+Threshold: 0.51721
+이상치 탐지 수: 126건
+
+-모델 평가 및 해석
+Autoencoder
+손실이 Epoch마다 꾸준히 감소 → 모델이 정상 거래를 잘 학습함
+이상치 탐지 기준을 데이터 기반으로 설정 (상위 5%) → 통계적으로 신뢰 가능한 방식
+이상치 수: 126건 → 전체 거래의 약 5.01%, 실제 금융 이상거래 발생 비율과 유사
+
+DBSCAN
+다양한 eps/min_samples 조합 실험을 통해 민감도 조정 가능
+eps=1.0, min_samples=5에서 130건 탐지 → Autoencoder 결과와 유사한 규모
+
+문제점
+eps, min_samples 선택이 민감하며 튜닝이 필요
+고차원 데이터일수록 성능이 떨어질 수 있음
+결과가 Autoencoder보다 다소 변동성이 큼 
