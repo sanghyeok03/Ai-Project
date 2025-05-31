@@ -1,7 +1,7 @@
 # Ai-Project
 데이터셋 컬럼 정리는 '김은서'님의 정리로 채택
 
-#Autoencoder.ipynb (11,12)학습 결과
+Autoencoder.ipynb (11,12)학습 결과
 총 샘플 수: 약 294,588개
 수치형 사용 변수: credit_card_limit: 신용카드 한도, zipcode: 우편번호, transaction_dollar_amount: 거래 금액, Long, Lat: 위도와 경도, credit_card: 카드 번호 (수치 처리됨)
 전처리 후 전체 데이터 중 10,000개 샘플을 랜덤 추출하여 DBSCAN 실험에 사용
