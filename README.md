@@ -1,23 +1,24 @@
 # Ai-Project
 데이터셋 컬럼 정리는 '김은서'님의 정리로 채택
 
-Autoencoder.ipynb (11,12)학습 결과
+# Autoencoder.ipynb (11,12)학습 결과
 총 샘플 수: 약 294,588개
-수치형 사용 변수: credit_card_limit: 신용카드 한도, zipcode: 우편번호, transaction_dollar_amount: 거래 금액, Long, Lat: 위도와 경도, credit_card: 카드 번호 (수치 처리됨)
+수치형 사용 변수: credit_card_limit: 신용카드 한도, zipcode: 우편번호, transaction_dollar_amount: 거래 금액,
+Long, Lat: 위도와 경도, credit_card: 카드 번호 (수치 처리됨)
 전처리 후 전체 데이터 중 10,000개 샘플을 랜덤 추출하여 DBSCAN 실험에 사용
 
-Autoencoder 기반 이상치 탐지
+- Autoencoder 기반 이상치 탐지
 입력 데이터를 인코딩-디코딩하여 재구성 오차를 측정
 재구성 오차가 기준 임계값 보다 큰 샘플을 이상치로 판단
 오차 기준은 정량적으로 계산된 0.00018을 사용
 
-3.2 DBSCAN (클러스터 밀도 기반 이상치 탐지 알고리즘)
+- DBSCAN (클러스터 밀도 기반 이상치 탐지 알고리즘)
 이웃 거리(eps)와 최소 샘플 수(min_samples)를 기준으로 밀도가 낮은 점들을 이상치로 판단
 다양한 파라미터 설정으로 결과 비교:
 eps = [0.5, 1.0, 1.5]
 min_samples = [5, 10]
 
-Autoencoder 학습 결과
+- Autoencoder 학습 결과
 에폭 수: 50
 초기 손실 (Epoch 1): 1.3758
 최종 손실 (Epoch 50): 0.0046
@@ -26,8 +27,8 @@ Autoencoder 학습 결과
 빠른 감소 (1~10 epoch) → 점진적 감소 (11~20 epoch) → 수렴 상태 유지 (20 epoch 이후)
 이러한 학습 결과는 Autoencoder가 정상 거래 패턴을 잘 학습했다는 것을 시사함.
 
-5. 이상치 탐지 결과
-5.1 Autoencoder 결과 (재구성 오차 기준)
+- 이상치 탐지 결과
+Autoencoder 결과 (재구성 오차 기준)
 임계값 (Threshold): 0.00018
 탐지된 이상치 수: 500건
 전체 샘플 중 0.17% 가량이 이상치로 탐지됨
