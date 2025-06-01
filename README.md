@@ -93,3 +93,5 @@ eps=1.0, min_samples=5에서 130건 탐지 → Autoencoder 결과와 유사한 �
 eps, min_samples 선택이 민감하며 튜닝이 필요
 고차원 데이터일수록 성능이 떨어질 수 있음
 결과가 Autoencoder보다 다소 변동성이 큼 
+
+# 21,22,23은 안돌아감
