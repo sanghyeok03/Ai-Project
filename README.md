@@ -151,3 +151,44 @@ Precision이 높아 잘못된 이상치 판정(정상 거래를 Fraud로 판단)
 Fraud 탐지에서 Recall이 중요한 만큼 XGBoost, LightGBM 등과 비교 실험 필요
 RandomForest는 고차원 데이터에서는 속도 저하 가능성 존재
 
+#Isolationforest 결과 분석
+
+총 샘플 수: cc_info.csv에서 로드된 데이터
+(샘플 수는 코드 상에 출력은 없지만, 데이터 출력 후 .head() 확인 → 추후 데이터 크기 확인 가능)
+
+사용 변수: 자동 선택된 수치형 변수들 (int64, float64 형식 자동 선택)
+→ 예시: feature1, feature2, ..., (실제 컬럼명은 데이터셋 기준)
+
+Isolation Forest 기반 이상치 탐지
+알고리즘: IsolationForest
+
+주요 파라미터:
+n_estimators: 1000
+contamination: 0.1 (이상치 비율 10%로 가정)
+random_state: 42
+
+입력 데이터: 자동 선택된 수치형 feature
+
+학습 결과
+anomaly 컬럼 추가: IsolationForest로 예측한 결과 (-1: 이상치, 1: 정상치)
+
+이상치 분포:
+Detected outliers (이상치): df[df['anomaly'] == -1] → 출력됨
+
+시각화 결과
+첫 번째 feature와 두 번째 feature 기준으로 Scatter Plot 시각화
+
+색상:
+정상치: 파란색 계열
+이상치: 빨간색 계열
+
+해석 및 결론
+Isolation Forest는 샘플 수가 명확하지 않은 경우에도 자동으로 이상치 탐지 가능
+contamination 파라미터를 통해 이상치 민감도 조절 가능
+시각화 결과 정상 데이터와 이상 데이터가 일정 정도 구분됨
+간단한 적용으로 빠르게 이상치 감지 가능
+
+문제점 및 한계
+contamination 파라미터 설정에 따라 결과가 크게 달라질 수 있음 → 사전 분석 필요
+feature 선택이 자동화되어 있어, feature engineering이 충분하지 않은 경우 성능 저하 가능성 존재
+고차원 데이터에서는 시각화가 제한됨 → 차원 축소 기법(PCA 등)과 함께 적용 필요
