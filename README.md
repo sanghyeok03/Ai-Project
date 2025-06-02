@@ -97,24 +97,24 @@ eps, min_samples 선택이 민감하며 튜닝이 필요
 ## 21,22,23은 안돌아감
 
 
-#RandomForest 분석결과
+# RandomForest 분석결과
 
-총 샘플 수: 284,807건
-사용 변수: V1 ~ V28 (PCA 변환 특징), Amount (거래 금액, 정규화됨)
-타겟 변수: Class (0: 정상 거래, 1: Fraud 거래)
-Fraud 거래 비율: 약 0.17%
+- 총 샘플 수: 284,807건
+- 사용 변수: V1 ~ V28 (PCA 변환 특징), Amount (거래 금액, 정규화됨)
+- 타겟 변수: Class (0: 정상 거래, 1: Fraud 거래)
+- Fraud 거래 비율: 약 0.17%
 
 RandomForest 기반 이상치(Fraud 거래) 탐지
 입력 데이터를 이용하여 정상/이상 거래를 분류하는 RandomForestClassifier 학습
 
-주요 파라미터:
+- 주요 파라미터:
 n_estimators: 100
 max_depth: 10
 random_state: 42
 
-학습/검증 데이터 분할: 80% 학습, 20% 테스트
+- 학습/검증 데이터 분할: 80% 학습, 20% 테스트
 
-학습 결과
+- 학습 결과
 지표	값
 Accuracy	99.92%
 Precision	87.50%
@@ -126,7 +126,7 @@ Predicted Normal (0)	Predicted Fraud (1)
 Actual Normal (0)	56,560	7
 Actual Fraud (1)	9	29
 
-Feature Importance 분석
+- Feature Importance 분석
 가장 중요한 변수들:
 V17
 V14
@@ -135,60 +135,61 @@ V10
 → PCA로 변환된 주요 특징들이 Fraud 거래 탐지에 기여
 → Amount 변수는 상대적으로 낮은 중요도
 
-Precision-Recall Curve 결과
+- Precision-Recall Curve 결과
 Fraud 거래 탐지 성능(Recall): 약 76%
-Precision: 비교적 높아 잘못된 Positive 예측은 적은 편
-비즈니스 측면에서 Fraud 탐지에 실질적으로 활용 가능
+Precision:
+  비교적 높아 잘못된 Positive 예측은 적은 편
+  비즈니스 측면에서 Fraud 탐지에 실질적으로 활용 가능
 
-해석 및 결론
-RandomForest는 불균형 데이터에서도 비교적 안정적인 이상치 탐지 성능을 보임
-주요 Feature의 중요도를 확인 가능하여 모델 해석성이 높음
-Recall은 약 76% 수준으로 Fraud 거래 탐지 시 어느 정도 유효한 결과 확보
-Precision이 높아 잘못된 이상치 판정(정상 거래를 Fraud로 판단)도 적은 편
+### 해석 및 결론
+- RandomForest는 불균형 데이터에서도 비교적 안정적인 이상치 탐지 성능을 보임
+- 주요 Feature의 중요도를 확인 가능하여 모델 해석성이 높음
+- Recall은 약 76% 수준으로 Fraud 거래 탐지 시 어느 정도 유효한 결과 확보
+- Precision이 높아 잘못된 이상치 판정(정상 거래를 Fraud로 판단)도 적은 편
 
-문제점 및 한계
-데이터 불균형 문제 여전 → Recall을 높이기 위한 추가 기법 필요 (예: SMOTE, 부스팅 기반 모델 등)
-Fraud 탐지에서 Recall이 중요한 만큼 XGBoost, LightGBM 등과 비교 실험 필요
-RandomForest는 고차원 데이터에서는 속도 저하 가능성 존재
+### 문제점 및 한계
+- 데이터 불균형 문제 여전 → Recall을 높이기 위한 추가 기법 필요 (예: SMOTE, 부스팅 기반 모델 등)
+- Fraud 탐지에서 Recall이 중요한 만큼 XGBoost, LightGBM 등과 비교 실험 필요
+- RandomForest는 고차원 데이터에서는 속도 저하 가능성 존재
+
 
 #Isolationforest 결과 분석
 
-총 샘플 수: cc_info.csv에서 로드된 데이터
+- 총 샘플 수: cc_info.csv에서 로드된 데이터
 (샘플 수는 코드 상에 출력은 없지만, 데이터 출력 후 .head() 확인 → 추후 데이터 크기 확인 가능)
 
-사용 변수: 자동 선택된 수치형 변수들 (int64, float64 형식 자동 선택)
-→ 예시: feature1, feature2, ..., (실제 컬럼명은 데이터셋 기준)
+- 사용 변수: 자동 선택된 수치형 변수들 (int64, float64 형식 자동 선택)
 
 Isolation Forest 기반 이상치 탐지
 알고리즘: IsolationForest
 
-주요 파라미터:
+- 주요 파라미터:
 n_estimators: 1000
 contamination: 0.1 (이상치 비율 10%로 가정)
 random_state: 42
 
-입력 데이터: 자동 선택된 수치형 feature
+- 입력 데이터: 자동 선택된 수치형 feature
 
-학습 결과
+- 학습 결과
 anomaly 컬럼 추가: IsolationForest로 예측한 결과 (-1: 이상치, 1: 정상치)
 
-이상치 분포:
+- 이상치 분포:
 Detected outliers (이상치): df[df['anomaly'] == -1] → 출력됨
 
-시각화 결과
+- 시각화 결과
 첫 번째 feature와 두 번째 feature 기준으로 Scatter Plot 시각화
 
-색상:
+- 색상:
 정상치: 파란색 계열
 이상치: 빨간색 계열
 
-해석 및 결론
-Isolation Forest는 샘플 수가 명확하지 않은 경우에도 자동으로 이상치 탐지 가능
-contamination 파라미터를 통해 이상치 민감도 조절 가능
-시각화 결과 정상 데이터와 이상 데이터가 일정 정도 구분됨
-간단한 적용으로 빠르게 이상치 감지 가능
+### 해석 및 결론
+- Isolation Forest는 샘플 수가 명확하지 않은 경우에도 자동으로 이상치 탐지 가능
+- contamination 파라미터를 통해 이상치 민감도 조절 가능
+- 시각화 결과 정상 데이터와 이상 데이터가 일정 정도 구분됨
+- 간단한 적용으로 빠르게 이상치 감지 가능
 
-문제점 및 한계
-contamination 파라미터 설정에 따라 결과가 크게 달라질 수 있음 → 사전 분석 필요
-feature 선택이 자동화되어 있어, feature engineering이 충분하지 않은 경우 성능 저하 가능성 존재
-고차원 데이터에서는 시각화가 제한됨 → 차원 축소 기법(PCA 등)과 함께 적용 필요
+### 문제점 및 한계
+- contamination 파라미터 설정에 따라 결과가 크게 달라질 수 있음 → 사전 분석 필요
+- feature 선택이 자동화되어 있어, feature engineering이 충분하지 않은 경우 성능 저하 가능성 존재
+- 고차원 데이터에서는 시각화가 제한됨 → 차원 축소 기법(PCA 등)과 함께 적용 필요
